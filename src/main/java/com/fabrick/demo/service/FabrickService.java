@@ -30,29 +30,32 @@ public class FabrickService {
         this.transactionRepository = transactionRepository;
     }
 
-    public double getBalanceFromAPI(String accountId){
-        return apiClient.getBalanceFromFabrickAPI(accountId).getPayload().getAvailableBalance();
+    public double getBalanceFromAPI(String accountId) throws Exception {
+        return apiClient.getBalanceFromFabrickAPI(accountId)
+                .orElseThrow(() -> new Exception("Cant find balance for account"))
+                .getPayload().getAvailableBalance();
     }
 
     public List<TransactionsDTO.Transaction> getTransactionGivenAPeriod(String accountId,
                                                                         LocalDate from,
-                                                                        LocalDate to){
+                                                                        LocalDate to) {
 
         TransactionsDTO transactionsDTO = apiClient.getTransactionsFromFabrickAPI(accountId, from, to);
         List<TransactionsDTO.Transaction> transactions = transactionsDTO.getPayload().getTransaction();
-        transactionRepository.saveAll(transactions.stream().map(transaction -> {
-            Transaction transactionEntity = new Transaction();
-            transactionEntity.setTransactionId(Long.valueOf(transaction.getTransactionId()));
-            transactionEntity.setOperationId(transaction.getOperationId());
-            transactionEntity.setAmount(transaction.getAmount());
-            transactionEntity.setCurrency(transaction.getCurrency());
-            transactionEntity.setDescription(transaction.getDescription());
-            transactionEntity.setEnumeration(transaction.getType().getEnumeration());
-            transactionEntity.setValue(transaction.getType().getValue());
-            transactionEntity.setValueDate(transaction.getValueDate());
-            transactionEntity.setAccountingDate(transaction.getAccountingDate());
-            return transactionEntity;
-        }).collect(Collectors.toList()));
+        transactionRepository.saveAll(transactions.stream()
+                .map(transaction -> {
+                    Transaction transactionEntity = new Transaction();
+                    transactionEntity.setTransactionId(Long.valueOf(transaction.getTransactionId()));
+                    transactionEntity.setOperationId(transaction.getOperationId());
+                    transactionEntity.setAmount(transaction.getAmount());
+                    transactionEntity.setCurrency(transaction.getCurrency());
+                    transactionEntity.setDescription(transaction.getDescription());
+                    transactionEntity.setEnumeration(transaction.getType().getEnumeration());
+                    transactionEntity.setValue(transaction.getType().getValue());
+                    transactionEntity.setValueDate(transaction.getValueDate());
+                    transactionEntity.setAccountingDate(transaction.getAccountingDate());
+                    return transactionEntity;
+                }).collect(Collectors.toList()));
         return transactionsDTO.getPayload().getTransaction();
     }
 

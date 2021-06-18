@@ -26,10 +26,13 @@ public class FabrickController {
 
     @GetMapping("/balance")
     public ResponseEntity<Double> getBalance(@RequestParam String accountId) {
-        if(valid(accountId)){
-            return ResponseEntity.ok(service.getBalanceFromAPI(accountId));
-        }
-        return ResponseEntity.badRequest().build();
+            try {
+                return valid(accountId) ?
+                        ResponseEntity.ok(service.getBalanceFromAPI(accountId)) :
+                        ResponseEntity.notFound().build();
+            } catch (Exception ex) {
+                return ResponseEntity.notFound().build();
+            }
     }
 
     @GetMapping("/transactions")

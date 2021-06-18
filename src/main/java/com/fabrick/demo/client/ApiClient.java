@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -29,13 +30,17 @@ public class ApiClient {
         this.restTemplate  = new RestTemplate();
     }
 
-    public AccountBalanceDTO getBalanceFromFabrickAPI(String accountId){
+    public Optional<AccountBalanceDTO> getBalanceFromFabrickAPI(String accountId){
         String accountUri = "/api/gbs/banking/v4.0/accounts/" + accountId + "/balance";
-        ResponseEntity<AccountBalanceDTO> accountBalanceResponse = restTemplate.exchange(API_URL + accountUri,
-                HttpMethod.GET,
-                new HttpEntity(getHeaders()),
-                AccountBalanceDTO.class);
-        return accountBalanceResponse.getBody();
+        try {
+            return Optional.ofNullable(restTemplate.exchange(API_URL + accountUri,
+                    HttpMethod.GET,
+                    new HttpEntity(getHeaders()),
+                    AccountBalanceDTO.class).getBody());
+        } catch (HttpClientErrorException ex){
+            log.error(ex.getMessage());
+            return Optional.empty();
+        }
     }
 
     public TransactionsDTO getTransactionsFromFabrickAPI(String accountId, LocalDate from, LocalDate to) {
