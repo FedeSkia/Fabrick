@@ -1,17 +1,18 @@
 package com.fabrick.demo.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class AccountBalance {
+public class AccountBalanceDTO {
 
     public String status;
     public List<String> error;
@@ -20,10 +21,9 @@ public class AccountBalance {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
     public static class Payload {
 
-        public String date;
+        public LocalDate date;
         public double balance;
         public double availableBalance;
         public String currency;

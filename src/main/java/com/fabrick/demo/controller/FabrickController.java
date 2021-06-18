@@ -1,6 +1,6 @@
 package com.fabrick.demo.controller;
 
-import com.fabrick.demo.controller.dto.AccountBalance;
+import com.fabrick.demo.client.dto.TransferFabrickAPIResponseDTO;
 import com.fabrick.demo.controller.dto.TransactionsDTO;
 import com.fabrick.demo.controller.dto.TransferDTO;
 import com.fabrick.demo.service.FabrickService;
@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -38,8 +39,8 @@ public class FabrickController {
     }
 
     @PostMapping("/transfer")
-    public void doTransfer(@RequestBody TransferDTO transferDTO) {
-        service.doTransfer(transferDTO);
+    public Collection<TransferFabrickAPIResponseDTO.Error> doTransfer(@RequestBody TransferDTO transferDTO) {
+        return service.doTransfer(transferDTO);
     }
 
 

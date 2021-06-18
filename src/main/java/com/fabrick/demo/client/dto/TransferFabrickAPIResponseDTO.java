@@ -21,10 +21,12 @@ public class TransferFabrickAPIResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Root{
-        public String status;
-        public List<Error> errors;
-        public Payload payload;
+    public static class Error {
+
+        private String code;
+        private String description;
+        private String params;
+
     }
 
     @Data

@@ -2,14 +2,14 @@ package com.fabrick.demo.client;
 
 import com.fabrick.demo.client.dto.TransferFabrickAPIRequestDTO;
 import com.fabrick.demo.client.dto.TransferFabrickAPIResponseDTO;
-import com.fabrick.demo.controller.dto.AccountBalance;
+import com.fabrick.demo.controller.dto.AccountBalanceDTO;
 import com.fabrick.demo.controller.dto.TransactionsDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,19 +27,18 @@ public class ApiClient {
 
     public ApiClient() {
         this.restTemplate  = new RestTemplate();
-        restTemplate.setInterceptors(Collections.singletonList(new RequestResponseLoggingInterceptor()));
     }
 
-    public AccountBalance getBalanceFromFabrickAPI(String accountId){
+    public AccountBalanceDTO getBalanceFromFabrickAPI(String accountId){
         String accountUri = "/api/gbs/banking/v4.0/accounts/" + accountId + "/balance";
-        ResponseEntity<AccountBalance> accountBalanceResponse = restTemplate.exchange(API_URL + accountUri,
+        ResponseEntity<AccountBalanceDTO> accountBalanceResponse = restTemplate.exchange(API_URL + accountUri,
                 HttpMethod.GET,
                 new HttpEntity(getHeaders()),
-                AccountBalance.class);
+                AccountBalanceDTO.class);
         return accountBalanceResponse.getBody();
     }
 
-    public TransactionsDTO getTransactionsFromFabrickAPI(String accountId, LocalDate from, LocalDate to){
+    public TransactionsDTO getTransactionsFromFabrickAPI(String accountId, LocalDate from, LocalDate to) {
         String transactionsURI = "/api/gbs/banking/v4.0/accounts/" + accountId + "/transactions?fromAccountingDate=" + from.toString()
                 + "&toAccountingDate=" + to.toString();
         ResponseEntity<TransactionsDTO> transactions = restTemplate.exchange(API_URL + transactionsURI,
@@ -53,15 +52,16 @@ public class ApiClient {
     public TransferFabrickAPIResponseDTO transfer(TransferFabrickAPIRequestDTO transferDTO){
         String transferURI = "/api/gbs/banking/v4.0/accounts/" + transferDTO.getFeeAccountId() +
                 "/payments/money-transfers";
+        ResponseEntity<TransferFabrickAPIResponseDTO> response;
         try {
-            ResponseEntity<TransferFabrickAPIResponseDTO> response = restTemplate.exchange(API_URL + transferURI,
+            response = restTemplate.exchange(API_URL + transferURI,
                     HttpMethod.POST,
                     createBodyWithHeaders(transferDTO),
                     TransferFabrickAPIResponseDTO.class);
             return response.getBody();
-        } catch (RestClientException ex) {
+        } catch (HttpClientErrorException ex) {
             log.error(ex.getMessage());
-            return null;
+            return objectMapper.readValue(ex.getResponseBodyAsString(), TransferFabrickAPIResponseDTO.class);
         }
     }
 
