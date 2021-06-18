@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class TransactionsDTO {
     public static class Transaction {
         public String transactionId;
         public String operationId;
-        public String accountingDate;
-        public String valueDate;
+        public LocalDate accountingDate;
+        public LocalDate valueDate;
         public Type type;
         public double amount;
         public String currency;

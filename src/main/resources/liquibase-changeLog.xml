@@ -1,0 +1,43 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Fede" id="1">
+
+        <createTable tableName="transactions">
+
+            <column name="transaction_id" type="bigint" >
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="operation_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="accounting_date" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="value_date" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="enumeration" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="value" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="amount" type="double">
+                <constraints nullable="true"/>
+            </column>
+            <column name="currency" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+
+    </changeSet>
+
+</databaseChangeLog>
