@@ -3,6 +3,8 @@ package com.fabrick.demo.controller;
 
 import com.fabrick.demo.client.ApiClient;
 import com.fabrick.demo.controller.dto.TransactionsDTO;
+import com.fabrick.demo.repository.Transaction;
+import com.fabrick.demo.repository.TransactionRepository;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -19,6 +21,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,6 +33,8 @@ public class FabrickControllerTransactionTest {
     String validAccount = "14537780";
     @Autowired
     private TestRestTemplate testRestTemplate;
+    @Autowired
+    private TransactionRepository transactionRepository;
     @MockBean
     private ApiClient apiClient;
 
@@ -41,8 +46,10 @@ public class FabrickControllerTransactionTest {
                         "accountId=" + validAccount +
                         "&from=2021-01-17" +
                         "&to=2021-01-17", TransactionsDTO.Transaction[].class);
+        List<Transaction> transactions = transactionRepository.findAll();
         assertThat(response.getBody().length).isEqualTo(1);
         assertThat(response.getBody()[0]).isEqualTo(transactionsDTO.getPayload().getTransaction().get(0));
+        assertThat(transactions.size()).isEqualTo(1);
     }
 
 
