@@ -32,15 +32,17 @@ class FabrickControllerAccountBalanceTest {
     @Test
     public void check_balance_is_retrieved() {
         AccountBalanceDTO accountBalanceDTO = mockAPIClientForBalance();
-        ResponseEntity<Double> response = testRestTemplate.getForEntity("http://localhost:" + port + "/balance?accountId=" + validAccount, Double.class);
+        ResponseEntity<Double> response = testRestTemplate
+                .getForEntity("http://localhost:" + port + "/balance?accountId=" + validAccount, Double.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo(100);
+        assertThat(response.getBody()).isEqualTo(accountBalanceDTO.getPayload().getAvailableBalance());
     }
 
     @Test
     public void check_balance_when_invalid_account() {
         String invalidAccountId = "xyz";
-        ResponseEntity<Double> response = testRestTemplate.getForEntity("http://localhost:" + port + "/balance?accountId=" + invalidAccountId, Double.class);
+        ResponseEntity<String> response = testRestTemplate
+                .getForEntity("http://localhost:" + port + "/balance?accountId=" + invalidAccountId, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 

@@ -8,6 +8,7 @@ import com.fabrick.demo.controller.dto.TransferDTO;
 import com.fabrick.demo.mapper.TransferMapper;
 import com.fabrick.demo.repository.Transaction;
 import com.fabrick.demo.repository.TransactionRepository;
+import exception.BalanceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,9 +31,9 @@ public class FabrickService {
         this.transactionRepository = transactionRepository;
     }
 
-    public double getBalanceFromAPI(String accountId) throws Exception {
+    public double getBalanceFromAPI(String accountId) throws BalanceNotFoundException {
         return apiClient.getBalanceFromFabrickAPI(accountId)
-                .orElseThrow(() -> new Exception("Cant find balance for account"))
+                .orElseThrow(() -> new BalanceNotFoundException("Cant find balance for account"))
                 .getPayload().getAvailableBalance();
     }
 

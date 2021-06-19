@@ -4,7 +4,9 @@ import com.fabrick.demo.client.dto.TransferFabrickAPIResponseDTO;
 import com.fabrick.demo.controller.dto.TransactionsDTO;
 import com.fabrick.demo.controller.dto.TransferDTO;
 import com.fabrick.demo.service.FabrickService;
+import exception.BalanceNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,25 +27,21 @@ public class FabrickController {
 
     @GetMapping("/balance")
     public ResponseEntity<Double> getBalance(@RequestParam String accountId) {
-            try {
-                return valid(accountId) ?
-                        ResponseEntity.ok(service.getBalanceFromAPI(accountId)) :
-                        ResponseEntity.notFound().build();
-            } catch (Exception ex) {
-                return ResponseEntity.notFound().build();
-            }
+        return valid(accountId) ?
+                ResponseEntity.ok(service.getBalanceFromAPI(accountId)) :
+                ResponseEntity.notFound().build();
     }
 
     @GetMapping("/transactions")
     public ResponseEntity<Collection<TransactionsDTO.Transaction>> getTransactions(@RequestParam
-                                                                     String accountId,
-                                                             @RequestParam
-                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                     LocalDate from,
-                                                             @RequestParam
-                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                     LocalDate to) {
-        if(valid(accountId) && validDate(from) && validDate(to)){
+                                                                                           String accountId,
+                                                                                   @RequestParam
+                                                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                                           LocalDate from,
+                                                                                   @RequestParam
+                                                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                                           LocalDate to) {
+        if (valid(accountId) && validDate(from) && validDate(to)) {
             return ResponseEntity.ok(service.getTransactionGivenAPeriod(accountId, from, to));
         }
         return ResponseEntity.badRequest().build();
