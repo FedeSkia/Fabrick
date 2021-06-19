@@ -74,7 +74,7 @@ public class FabrickControllerTransactionTest {
 
         Mockito.when(apiClient
                 .getTransactionsFromFabrickAPI(ArgumentMatchers.anyString(), ArgumentMatchers.any(LocalDate.class), ArgumentMatchers.any(LocalDate.class)))
-                .thenReturn(transactionsDTO);
+                .thenReturn(java.util.Optional.ofNullable(transactionsDTO));
         return transactionsDTO;
     }
 

@@ -5,15 +5,18 @@ import com.fabrick.demo.client.dto.TransferFabrickAPIRequestDTO;
 import com.fabrick.demo.client.dto.TransferFabrickAPIResponseDTO;
 import com.fabrick.demo.controller.dto.TransactionsDTO;
 import com.fabrick.demo.controller.dto.TransferDTO;
+import com.fabrick.demo.mapper.TransactionMapper;
 import com.fabrick.demo.mapper.TransferMapper;
 import com.fabrick.demo.repository.Transaction;
 import com.fabrick.demo.repository.TransactionRepository;
 import exception.BalanceNotFoundException;
+import exception.TransactionsNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,13 +24,16 @@ public class FabrickService {
 
     private final ApiClient apiClient;
     private final TransferMapper transferMapper;
+    private final TransactionMapper transactionMapper;
     private final TransactionRepository transactionRepository;
 
     public FabrickService(ApiClient apiClient,
                           TransferMapper transferMapper,
+                          TransactionMapper transactionMapper,
                           TransactionRepository transactionRepository) {
         this.apiClient = apiClient;
         this.transferMapper = transferMapper;
+        this.transactionMapper = transactionMapper;
         this.transactionRepository = transactionRepository;
     }
 
@@ -37,27 +43,18 @@ public class FabrickService {
                 .getPayload().getAvailableBalance();
     }
 
-    public List<TransactionsDTO.Transaction> getTransactionGivenAPeriod(String accountId,
+    public Collection<TransactionsDTO.Transaction> getTransactionGivenAPeriod(String accountId,
                                                                         LocalDate from,
                                                                         LocalDate to) {
 
-        TransactionsDTO transactionsDTO = apiClient.getTransactionsFromFabrickAPI(accountId, from, to);
-        List<TransactionsDTO.Transaction> transactions = transactionsDTO.getPayload().getTransaction();
+        Collection<TransactionsDTO.Transaction> transactions = apiClient.getTransactionsFromFabrickAPI(accountId, from, to)
+                .orElseThrow(() -> new TransactionsNotFoundException("Cant find transactions"))
+                .getPayload()
+                .getTransaction();
         transactionRepository.saveAll(transactions.stream()
-                .map(transaction -> {
-                    Transaction transactionEntity = new Transaction();
-                    transactionEntity.setTransactionId(Long.valueOf(transaction.getTransactionId()));
-                    transactionEntity.setOperationId(transaction.getOperationId());
-                    transactionEntity.setAmount(transaction.getAmount());
-                    transactionEntity.setCurrency(transaction.getCurrency());
-                    transactionEntity.setDescription(transaction.getDescription());
-                    transactionEntity.setEnumeration(transaction.getType().getEnumeration());
-                    transactionEntity.setValue(transaction.getType().getValue());
-                    transactionEntity.setValueDate(transaction.getValueDate());
-                    transactionEntity.setAccountingDate(transaction.getAccountingDate());
-                    return transactionEntity;
-                }).collect(Collectors.toList()));
-        return transactionsDTO.getPayload().getTransaction();
+                .map(transactionMapper::toEntity)
+                .collect(Collectors.toList()));
+        return transactions;
     }
 
     public Collection<TransferFabrickAPIResponseDTO.Error> doTransfer(TransferDTO transferDTO) {

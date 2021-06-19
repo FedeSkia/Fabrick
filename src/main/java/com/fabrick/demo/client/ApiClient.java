@@ -43,14 +43,17 @@ public class ApiClient {
         }
     }
 
-    public TransactionsDTO getTransactionsFromFabrickAPI(String accountId, LocalDate from, LocalDate to) {
+    public Optional<TransactionsDTO> getTransactionsFromFabrickAPI(String accountId, LocalDate from, LocalDate to) {
         String transactionsURI = "/api/gbs/banking/v4.0/accounts/" + accountId + "/transactions?fromAccountingDate=" + from.toString()
                 + "&toAccountingDate=" + to.toString();
-        ResponseEntity<TransactionsDTO> transactions = restTemplate.exchange(API_URL + transactionsURI,
-                HttpMethod.GET,
-                new HttpEntity(getHeaders()),
-                TransactionsDTO.class);
-        return transactions.getBody();
+        try {
+            return Optional.ofNullable(restTemplate.exchange(API_URL + transactionsURI,
+                    HttpMethod.GET,
+                    new HttpEntity(getHeaders()),
+                    TransactionsDTO.class).getBody());
+        } catch (HttpClientErrorException ex){
+            return Optional.empty();
+        }
     }
 
     @SneakyThrows
