@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AccountBalanceDTO {
 
     public String status;
@@ -21,6 +22,7 @@ public class AccountBalanceDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Payload {
 
         public LocalDate date;

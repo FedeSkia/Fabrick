@@ -2,6 +2,7 @@ package com.fabrick.demo.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class TransactionsDTO {
 
     public String status;
@@ -21,6 +23,7 @@ public class TransactionsDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Type{
         public String enumeration;
         public String value;
@@ -29,6 +32,7 @@ public class TransactionsDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Transaction {
         public String transactionId;
         public String operationId;
@@ -43,6 +47,7 @@ public class TransactionsDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Payload{
         @JsonProperty("list")
         public List<Transaction> transaction;
