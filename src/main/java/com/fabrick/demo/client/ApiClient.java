@@ -52,6 +52,7 @@ public class ApiClient {
                     new HttpEntity(getHeaders()),
                     TransactionsDTO.class).getBody());
         } catch (HttpClientErrorException ex){
+            log.error(ex.getMessage());
             return Optional.empty();
         }
     }
