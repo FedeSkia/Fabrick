@@ -1,5 +1,6 @@
 package com.fabrick.demo.client.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 public class TransferFabrickAPIRequestDTO {
 
     public Creditor creditor;
+    @JsonFormat(pattern="yyyy-MM-dd")
     public LocalDate executionDate;
     public String uri;
     public String description;
