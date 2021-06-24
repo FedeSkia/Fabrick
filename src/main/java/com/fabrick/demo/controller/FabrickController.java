@@ -1,15 +1,14 @@
 package com.fabrick.demo.controller;
 
-import com.fabrick.demo.client.dto.TransferFabrickAPIResponseDTO;
+import com.fabrick.demo.client.dto.Error;
 import com.fabrick.demo.controller.dto.TransactionsDTO;
 import com.fabrick.demo.controller.dto.TransferDTO;
 import com.fabrick.demo.service.FabrickService;
-import exception.BalanceNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class FabrickController {
     }
 
     @GetMapping("/balance")
-    public ResponseEntity<Double> getBalance(@RequestParam String accountId) {
+    public ResponseEntity<Mono<Object>> getBalance(@RequestParam String accountId) {
         return valid(accountId) ?
                 ResponseEntity.ok(service.getBalanceFromAPI(accountId)) :
                 ResponseEntity.notFound().build();
@@ -48,7 +47,7 @@ public class FabrickController {
     }
 
     @PostMapping("/transfer")
-    public Collection<TransferFabrickAPIResponseDTO.Error> doTransfer(@RequestBody TransferDTO transferDTO) {
+    public Collection<Error> doTransfer(@RequestBody TransferDTO transferDTO) {
         return service.doTransfer(transferDTO);
     }
 

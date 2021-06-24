@@ -1,0 +1,112 @@
+{
+  "status": "OK",
+  "error": [],
+  "payload": {
+    "list": [
+      {
+        "transactionId": "1759260678001",
+        "operationId": "21000097945519",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 6.81,
+        "currency": "EUR",
+        "description": "BD PROVAB INTERNET       DA 03268.22300         Data Ordine 17062021 REMITINFO"
+      },
+      {
+        "transactionId": "1759260675001",
+        "operationId": "21000097945518",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 2.37,
+        "currency": "EUR",
+        "description": "BD PROVAB INTERNET       DA 03268.22300         Data Ordine 17062021 REMITINFO"
+      },
+      {
+        "transactionId": "1759260672001",
+        "operationId": "21000097945517",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 7.34,
+        "currency": "EUR",
+        "description": "BD PROVAB INTERNET       DA 03268.22300         Data Ordine 17062021 REMITINFO"
+      },
+      {
+        "transactionId": "1759260669001",
+        "operationId": "21000097945516",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 5.29,
+        "currency": "EUR",
+        "description": "BD PROVAB INTERNET       DA 03268.22300         Data Ordine 17062021 REMITINFO"
+      },
+      {
+        "transactionId": "1759234708001",
+        "operationId": "21000097931525",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 1.05,
+        "currency": "EUR",
+        "description": "BD FABRICK S P A         DA 03268.22300         Data Ordine 17062021 TEST"
+      },
+      {
+        "transactionId": "1759137453001",
+        "operationId": "21000097849487",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 1.05,
+        "currency": "EUR",
+        "description": "BD FABRICK S P A         DA 03268.22300         Data Ordine 17062021 TEST"
+      },
+      {
+        "transactionId": "1759135575001",
+        "operationId": "21000097848493",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 1.05,
+        "currency": "EUR",
+        "description": "BD FABRICK S P A         DA 03268.22300         Data Ordine 17062021 TEST"
+      },
+      {
+        "transactionId": "1759134026001",
+        "operationId": "21000097847446",
+        "accountingDate": "2021-06-17",
+        "valueDate": "2021-06-17",
+        "type": {
+          "enumeration": "GBS_TRANSACTION_TYPE",
+          "value": "GBS_ACCOUNT_TRANSACTION_TYPE_0010"
+        },
+        "amount": 1.05,
+        "currency": "EUR",
+        "description": "BD FABRICK S P A         DA 03268.22300         Data Ordine 17062021 TEST"
+      }
+    ]
+  }
+}

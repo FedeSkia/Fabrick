@@ -19,18 +19,6 @@ public class TransferFabrickAPIResponseDTO {
 
     @Data
     @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class Error {
-
-        private String code;
-        private String description;
-        private String params;
-
-    }
-
-    @Data
-    @AllArgsConstructor
     @Builder
     public static class Payload{
     }

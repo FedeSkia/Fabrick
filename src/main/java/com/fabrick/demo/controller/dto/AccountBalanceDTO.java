@@ -1,5 +1,6 @@
 package com.fabrick.demo.controller.dto;
 
+import com.fabrick.demo.client.dto.Error;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.List;
 public class AccountBalanceDTO {
 
     public String status;
-    public List<String> error;
+    public List<Error> errors;
     public Payload payload;
 
     @Data

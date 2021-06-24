@@ -1,25 +1,26 @@
 package com.fabrick.demo.service;
 
 import com.fabrick.demo.client.ApiClient;
+import com.fabrick.demo.client.dto.Error;
 import com.fabrick.demo.client.dto.TransferFabrickAPIRequestDTO;
 import com.fabrick.demo.client.dto.TransferFabrickAPIResponseDTO;
 import com.fabrick.demo.controller.dto.TransactionsDTO;
 import com.fabrick.demo.controller.dto.TransferDTO;
 import com.fabrick.demo.mapper.TransactionMapper;
 import com.fabrick.demo.mapper.TransferMapper;
-import com.fabrick.demo.repository.Transaction;
 import com.fabrick.demo.repository.TransactionRepository;
 import exception.BalanceNotFoundException;
 import exception.TransactionsNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class FabrickService {
 
     private final ApiClient apiClient;
@@ -37,10 +38,15 @@ public class FabrickService {
         this.transactionRepository = transactionRepository;
     }
 
-    public double getBalanceFromAPI(String accountId) throws BalanceNotFoundException {
+    public Mono<Object> getBalanceFromAPI(String accountId) throws BalanceNotFoundException {
         return apiClient.getBalanceFromFabrickAPI(accountId)
-                .orElseThrow(() -> new BalanceNotFoundException("Cant find balance for account"))
-                .getPayload().getAvailableBalance();
+                .map(accountBalanceDTO -> {
+                    if(accountBalanceDTO.getErrors() != null &&
+                            !accountBalanceDTO.getErrors().isEmpty()) {
+                        return accountBalanceDTO.getErrors();
+                    }
+                    return accountBalanceDTO.getPayload().getAvailableBalance();
+                });
     }
 
     public Collection<TransactionsDTO.Transaction> getTransactionGivenAPeriod(String accountId,
@@ -57,7 +63,7 @@ public class FabrickService {
         return transactions;
     }
 
-    public Collection<TransferFabrickAPIResponseDTO.Error> doTransfer(TransferDTO transferDTO) {
+    public Collection<Error> doTransfer(TransferDTO transferDTO) {
         TransferFabrickAPIRequestDTO transferFabrickAPIRequestDTO = transferMapper.toDTO(transferDTO);
         TransferFabrickAPIResponseDTO transferResponse = apiClient.transfer(transferFabrickAPIRequestDTO);
         return transferResponse.getErrors();
